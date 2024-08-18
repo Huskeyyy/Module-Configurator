@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <RootNamespace>Module_Configurator</RootNamespace>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="JRPC">
+      <HintPath>..\..\..\..\Documents\Coding Things\RTM .dll Files\JRPC.dll</HintPath>
+    </Reference>
+    <Reference Include="XDevkit">
+      <HintPath>..\..\..\..\Documents\Coding Things\RTM .dll Files\xdevkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
