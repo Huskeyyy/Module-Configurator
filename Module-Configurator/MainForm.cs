@@ -1,7 +1,6 @@
-﻿using System;
+﻿using JRPC_Client;
 using System.ComponentModel;
 using XDevkit;
-using JRPC_Client;
 
 namespace Module_Configurator
 {
@@ -11,7 +10,7 @@ namespace Module_Configurator
 
         public MainForm()
         {
-            InitializeComponent(); // Initializes the form components
+            InitializeComponent(); 
         }
 
         private void btnConnect_Click(object sender, EventArgs e)
@@ -19,7 +18,7 @@ namespace Module_Configurator
             try
             {
                 // Attempt to connect to the console using default settings
-                if (console.Connect(out console, "default"))
+                if (console.Connect(out console))
                 {
                     // Connect to the console's debugger
                     console.DebugTarget.ConnectAsDebugger("jtag", XboxDebugConnectFlags.Force);
@@ -36,11 +35,10 @@ namespace Module_Configurator
             {
                 // Show error message if an exception occurs
                 MessageBox.Show($"An error occurred: {ex.Message}", "Module Configurator", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Close(); // Close the application if there's an error
             }
         }
 
-        private void btnRefreshModules_Click(object sender, EventArgs e)
+        private void RefreshModuleList()
         {
             moduleDataGrid.Rows.Clear(); // Clear existing rows
 
@@ -59,6 +57,11 @@ namespace Module_Configurator
             // Sort the data grid by base address in ascending order
             moduleDataGrid.Sort(moduleDataGrid.Columns[1], ListSortDirection.Ascending);
             lblNoOfModules.Text = moduleDataGrid.Rows.Count.ToString(); // Update the label with the count of modules
+        }
+
+        private void btnRefreshModules_Click(object sender, EventArgs e)
+        {
+            RefreshModuleList();
         }
 
         private void btnClear_Click(object sender, EventArgs e)
@@ -92,7 +95,7 @@ namespace Module_Configurator
                         });
 
                         // Refresh the list of modules and update UI labels
-                        btnRefreshModules_Click(sender, e);
+                        RefreshModuleList();
                         lblNoOfModules.Text = moduleDataGrid.Rows.Count.ToString();
                         lblPreviousModule.Text = fileName; // Set the file name label
                         MessageBox.Show("Successfully injected module!");
@@ -111,8 +114,7 @@ namespace Module_Configurator
             string modulePath = string.Empty; // Variable to hold the module path
 
             // Show the InputBox to get the module path
-            if (InputBox.Show("Test Input Box",
-                "&Enter the path of the module you would like to load:", ref modulePath) == DialogResult.OK)
+            if (InputBox.Show("Test Input Box", "&Enter the path of the module you would like to load:", ref modulePath) == DialogResult.OK)
             {
                 try
                 {
@@ -126,7 +128,7 @@ namespace Module_Configurator
                     });
 
                     // Refresh modules and update labels
-                    btnRefreshModules_Click(sender, null);
+                    RefreshModuleList();
                     lblNoOfModules.Text = moduleDataGrid.Rows.Count.ToString();
                     lblPreviousModule.Text = modulePath; // Update the previous module label
                     console.XNotify("Successfully injected module!");
@@ -137,10 +139,64 @@ namespace Module_Configurator
                     MessageBox.Show("Failed to inject module, maybe the module you want to inject does not support it.", "Injection Error", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 }
             }
+        }
+
+        // Retrieves the address of the specified module
+        private uint GetModuleHandle(string moduleName)
+        {
+            object[] parameters = new object[] { moduleName };
+            return console.Call<uint>("xam.xex", 1102, parameters);
+        }
+
+        private void ButtonUnload_Click(object sender, EventArgs e)
+        {
+            // Check if any row is selected
+            if (moduleDataGrid.CurrentRow != null && moduleDataGrid.CurrentRow.Index >= 0)
+            {
+                // Get the selected row
+                DataGridViewRow selectedRow = moduleDataGrid.CurrentRow;
+
+                // Get the text from the first column (Module Name)
+                string moduleName = selectedRow.Cells[0].Value.ToString();
+
+                UnloadModule(moduleName, true);
+            }
             else
             {
-                // If user cancels or closes the InputBox, exit the method
-                return;
+                MessageBox.Show("Please select a module to unload.", "No Module Selected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+
+        private void UnloadModule(string module, bool sysdll)
+        {
+            try
+            {
+                uint moduleHandle = GetModuleHandle(module);
+
+                if (moduleHandle != 0)
+                {
+                    if (sysdll)
+                    {
+                        // Use the extension method
+                        console.WriteInt16(moduleHandle + 0x40, 1);
+                    }
+
+                    object[] arguments = { moduleHandle };
+                    console.CallVoid("xboxkrnl.exe", 0x1a1, arguments);
+
+                    RefreshModuleList();
+
+                    MessageBox.Show("Module unloaded successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("There was an error unloading the module. Please try again", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("There was an error unloading the module: \n " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
     }

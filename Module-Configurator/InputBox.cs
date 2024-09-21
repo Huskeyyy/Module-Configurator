@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Module_Configurator
+﻿namespace Module_Configurator
 {
-    class InputBox
+    internal class InputBox
     {
         /// <summary>
         /// Displays a dialog with a prompt and textbox where the user can enter information

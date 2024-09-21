@@ -10,12 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="JRPC">
-      <HintPath>..\..\..\..\Documents\Coding Things\RTM .dll Files\JRPC.dll</HintPath>
-    </Reference>
-    <Reference Include="XDevkit">
-      <HintPath>..\..\..\..\Documents\Coding Things\RTM .dll Files\xdevkit.dll</HintPath>
-    </Reference>
+   
   </ItemGroup>
 
 </Project>

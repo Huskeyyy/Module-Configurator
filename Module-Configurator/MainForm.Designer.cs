@@ -44,6 +44,7 @@
             btnClear = new Button();
             btnInjectConsole = new Button();
             btnInjectPC = new Button();
+            ButtonUnload = new Button();
             ((System.ComponentModel.ISupportInitialize)moduleDataGrid).BeginInit();
             menuStrip1.SuspendLayout();
             statusStrip1.SuspendLayout();
@@ -57,7 +58,7 @@
             moduleDataGrid.Name = "moduleDataGrid";
             moduleDataGrid.RowHeadersVisible = false;
             moduleDataGrid.RowHeadersWidth = 51;
-            moduleDataGrid.Size = new Size(789, 285);
+            moduleDataGrid.Size = new Size(789, 307);
             moduleDataGrid.TabIndex = 0;
             // 
             // moduleName
@@ -100,9 +101,9 @@
             // 
             // btnRefreshModules
             // 
-            btnRefreshModules.Location = new Point(47, 322);
+            btnRefreshModules.Location = new Point(12, 344);
             btnRefreshModules.Name = "btnRefreshModules";
-            btnRefreshModules.Size = new Size(175, 49);
+            btnRefreshModules.Size = new Size(153, 50);
             btnRefreshModules.TabIndex = 2;
             btnRefreshModules.Text = "Refresh Module List";
             btnRefreshModules.UseVisualStyleBackColor = true;
@@ -112,7 +113,7 @@
             // 
             statusStrip1.ImageScalingSize = new Size(20, 20);
             statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, lblNoOfModules, lblDivider1, toolStripStatusLabel3, lblPreviousModule });
-            statusStrip1.Location = new Point(0, 382);
+            statusStrip1.Location = new Point(0, 397);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Size = new Size(813, 26);
             statusStrip1.TabIndex = 3;
@@ -150,9 +151,9 @@
             // 
             // btnClear
             // 
-            btnClear.Location = new Point(228, 322);
+            btnClear.Location = new Point(171, 344);
             btnClear.Name = "btnClear";
-            btnClear.Size = new Size(175, 49);
+            btnClear.Size = new Size(153, 50);
             btnClear.TabIndex = 4;
             btnClear.Text = "Clear Module List";
             btnClear.UseVisualStyleBackColor = true;
@@ -160,9 +161,9 @@
             // 
             // btnInjectConsole
             // 
-            btnInjectConsole.Location = new Point(409, 322);
+            btnInjectConsole.Location = new Point(330, 344);
             btnInjectConsole.Name = "btnInjectConsole";
-            btnInjectConsole.Size = new Size(175, 49);
+            btnInjectConsole.Size = new Size(153, 50);
             btnInjectConsole.TabIndex = 6;
             btnInjectConsole.Text = "Inject Module from Console";
             btnInjectConsole.UseVisualStyleBackColor = true;
@@ -170,19 +171,30 @@
             // 
             // btnInjectPC
             // 
-            btnInjectPC.Location = new Point(590, 322);
+            btnInjectPC.Location = new Point(489, 344);
             btnInjectPC.Name = "btnInjectPC";
-            btnInjectPC.Size = new Size(175, 49);
+            btnInjectPC.Size = new Size(153, 50);
             btnInjectPC.TabIndex = 5;
             btnInjectPC.Text = "Inject Module from PC";
             btnInjectPC.UseVisualStyleBackColor = true;
             btnInjectPC.Click += btnInjectPC_Click;
             // 
+            // ButtonUnload
+            // 
+            ButtonUnload.Location = new Point(648, 344);
+            ButtonUnload.Name = "ButtonUnload";
+            ButtonUnload.Size = new Size(153, 50);
+            ButtonUnload.TabIndex = 7;
+            ButtonUnload.Text = "Unload Selected Module";
+            ButtonUnload.UseVisualStyleBackColor = true;
+            ButtonUnload.Click += ButtonUnload_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(813, 408);
+            ClientSize = new Size(813, 423);
+            Controls.Add(ButtonUnload);
             Controls.Add(btnInjectConsole);
             Controls.Add(btnInjectPC);
             Controls.Add(btnClear);
@@ -224,5 +236,6 @@
         private DataGridViewTextBoxColumn moduleSize;
         private Button btnInjectConsole;
         private Button btnInjectPC;
+        private Button ButtonUnload;
     }
 }
